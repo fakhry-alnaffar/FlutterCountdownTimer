@@ -102,8 +102,10 @@ class CountDownState extends State<CountdownTimer> {
       var days = _getNumberAddZero(time.days!);
       value = '$value$days days ';
     }
-    var hours = _getNumberAddZero(time.hours ?? 0);
-    value = '$value$hours : ';
+    if (time.hours != null) {
+      var hours = _getNumberAddZero(time.hours ?? 0);
+      value = '$value$hours : ';
+    }
     var min = _getNumberAddZero(time.min ?? 0);
     value = '$value$min : ';
     var sec = _getNumberAddZero(time.sec ?? 0);
