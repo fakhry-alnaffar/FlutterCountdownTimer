@@ -24,7 +24,7 @@ class CountdownTimer extends StatefulWidget {
 
   ///The end time of the countdown.
   final int? endTime;
-  final Widget startWidget;
+  final Widget? startWidget;
 
   const CountdownTimer({
     Key? key,
@@ -33,7 +33,7 @@ class CountdownTimer extends StatefulWidget {
     ),
     this.widgetBuilder,
     this.controller,
-    required this.startWidget,
+     this.startWidget,
     this.textStyle,
     this.endTime,
     this.onEnd,
@@ -108,9 +108,9 @@ class CountDownState extends State<CountdownTimer> {
     value = '$value$min : ';
     var sec = _getNumberAddZero(time.sec ?? 0);
     value = '$value$sec';
-    return Row(
+    return widget.startWidget!=null ? Row(
       children: [
-        widget.startWidget,
+        widget.startWidget??SizedBox(),
         SizedBox(
           width: 5,
         ),
@@ -119,6 +119,9 @@ class CountDownState extends State<CountdownTimer> {
           style: textStyle,
         ),
       ],
+    ):Text(
+      value,
+      style: textStyle,
     );
   }
 
