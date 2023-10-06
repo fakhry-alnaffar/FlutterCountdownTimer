@@ -92,22 +92,27 @@ class CountDownState extends State<CountdownTimer> {
     return widgetBuilder(context, currentRemainingTime);
   }
 
-  Widget builderCountdownTimer(
-      BuildContext context, CurrentRemainingTime? time) {
+  Widget builderCountdownTimer(BuildContext context, CurrentRemainingTime? time) {
     if (time == null) {
       return endWidget;
     }
+
     String value = '';
+
     if (time.days != null) {
       var days = _getNumberAddZero(time.days!);
-      value = '$value$days days ';
+      value = '$days days ';
     }
+
     var hours = _getNumberAddZero(time.hours ?? 0);
     value = '$value$hours : ';
+
     var min = _getNumberAddZero(time.min ?? 0);
     value = '$value$min : ';
+
     var sec = _getNumberAddZero(time.sec ?? 0);
-    value = '$value$sec';
+    value = '$value${_getNumberAddZero(int.tryParse(sec.toString())??0)}'; // Format seconds with leading zero
+
     return Row(
       children: [
         widget.startWidget,
@@ -122,11 +127,9 @@ class CountDownState extends State<CountdownTimer> {
     );
   }
 
-  /// 1 -> 01
   String _getNumberAddZero(int number) {
-    if (number < 10) {
-      return "0$number";
-    }
-    return number.toString();
+    // Add a leading zero if the number is less than 10
+    return number < 10 ? '0$number' : '$number';
   }
+
 }
