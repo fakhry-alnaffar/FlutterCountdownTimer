@@ -24,14 +24,16 @@ class CountdownTimer extends StatefulWidget {
 
   ///The end time of the countdown.
   final int? endTime;
+  final Widget startWidget;
 
-  CountdownTimer({
+  const CountdownTimer({
     Key? key,
     this.endWidget = const Center(
       child: Text('The current time has expired'),
     ),
     this.widgetBuilder,
     this.controller,
+    required this.startWidget,
     this.textStyle,
     this.endTime,
     this.onEnd,
@@ -39,10 +41,10 @@ class CountdownTimer extends StatefulWidget {
         super(key: key);
 
   @override
-  _CountDownState createState() => _CountDownState();
+  CountDownState createState() => CountDownState();
 }
 
-class _CountDownState extends State<CountdownTimer> {
+class CountDownState extends State<CountdownTimer> {
   late CountdownTimerController controller;
 
   CurrentRemainingTime? get currentRemainingTime =>
@@ -95,17 +97,36 @@ class _CountDownState extends State<CountdownTimer> {
     if (time == null) {
       return endWidget;
     }
-
     String value = '';
     if (time.days != null) {
-      value = '$value${time.days} days ';
+      var days = _getNumberAddZero(time.days!);
+      value = '$value$days days ';
     }
-
-    return Text(
-      '$value${_padZero(time.hours)} : ${_padZero(time.min)} : ${_padZero(time.sec)}',
-      style: textStyle,
+    var hours = _getNumberAddZero(time.hours ?? 0);
+    value = '$value$hours : ';
+    var min = _getNumberAddZero(time.min ?? 0);
+    value = '$value$min : ';
+    var sec = _getNumberAddZero(time.sec ?? 0);
+    value = '$value$sec';
+    return Row(
+      children: [
+        widget.startWidget,
+        SizedBox(
+          width: 5,
+        ),
+        Text(
+          value,
+          style: textStyle,
+        ),
+      ],
     );
   }
 
-  String _padZero(int? number) => (number ?? 0).toString().padLeft(2, '0');
+  /// 1 -> 01
+  String _getNumberAddZero(int number) {
+    if (number < 10) {
+      return "0$number";
+    }
+    return number.toString();
+  }
 }
